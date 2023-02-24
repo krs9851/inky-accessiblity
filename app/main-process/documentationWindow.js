@@ -48,4 +48,10 @@ DocumentationWindow.changeTheme = function (theme) {
   }
 }
 
+DocumentationWindow.changeFont = function (font) {
+  if( documentationWindow != null ) {
+    documentationWindow.browserWindow.webContents.send("change-font", font);
+  }
+}
+
 exports.DocumentationWindow = DocumentationWindow;

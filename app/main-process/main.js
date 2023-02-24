@@ -26,6 +26,7 @@ let pendingPathToOpen = null;
 let hasFinishedLaunch = false;
 let isQuitting = false;
 
+
 app.on("open-file", function (event, path) {
 
     // e.g. Drag and drop onto app to open it.
@@ -131,6 +132,9 @@ app.on('ready', function () {
             var win = ProjectWindow.focused();
             if (win) win.stats();
         },
+        headers: () => {
+          ProjectWindow.headers();
+        },
         zoomIn: () => {
           var win = ProjectWindow.focused();
           if (win != null) {
@@ -167,7 +171,13 @@ app.on('ready', function () {
           AboutWindow.changeTheme(newTheme);
           DocumentationWindow.changeTheme(newTheme);
           ProjectWindow.addOrChangeViewSetting('theme', newTheme)
-        }
+        },
+        changeFont: (newFont) => {
+          AboutWindow.changeFont(newFont);
+          DocumentationWindow.changeFont(newFont);
+          ProjectWindow.addOrChangeViewSetting('font', newFont)
+        },
+        
     });
 
     AppMenus.setRecentFiles(ProjectWindow.getRecentFiles());

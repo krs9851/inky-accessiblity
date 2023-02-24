@@ -13,6 +13,16 @@ div {
   display: none;
 }
 
+h3 {
+  display: inline;
+  font-size: 1em;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: none;
+}
+
 .split {
   position: absolute;
   display: block;
@@ -592,8 +602,6 @@ img.issue-icon.warning {
   bottom: 0;
   right: 0;
   left: 50%;
-
-  font-family: Verdana, Geneva, sans-serif;
   font-weight: lighter;
   color: #555;
 }
@@ -829,9 +837,8 @@ img.issue-icon.warning {
   transition: opacity 0.3s;
 }
 
-#goto-anything.hidden {
-  display: block;
-  opacity: 0.0;
+#goto-anything.hidden input{
+  display: none;
 }
 
 #goto-anything input {

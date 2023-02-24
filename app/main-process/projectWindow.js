@@ -30,7 +30,7 @@ const viewSettingsPath = path.join(electron.app.getPath("userData"), "view-setti
 var events = {
     onRecentFilesChanged:    (files) => {},
     onProjectSettingsChanged: (settings) => {},
-    onViewSettingsChanged:   (settings) => {}
+    onViewSettingsChanged:   (settings) => {},
 };
 
 
@@ -42,6 +42,16 @@ function ProjectWindow(filePath) {
     ).submenu.items.find(
         e => e.checked
     ).label.toLowerCase();
+    
+    const getFontFromMenu = () => Menu.getApplicationMenu().items.find(
+        e => e.label.toLowerCase() === '&view'
+    ).submenu.items.find(
+        e => e.label.toLowerCase() === 'font'
+    ).submenu.items.find(
+        e => e.checked
+    ).label.toLowerCase();
+    
+    
 
     electronWindowOptions.title = i18n._("Inky");
     this.browserWindow = new BrowserWindow(electronWindowOptions);
@@ -87,6 +97,8 @@ function ProjectWindow(filePath) {
     // Set up theme/zoom from settings
     this.browserWindow.webContents.on('dom-ready', () => {
         this.browserWindow.send("change-theme", getThemeFromMenu());
+        this.browserWindow.send("change-font", getFontFromMenu());
+        this.browserWindow.send("change-headers");
         this.zoom(ProjectWindow.getViewSettings().zoom);
     });
 
@@ -95,6 +107,7 @@ function ProjectWindow(filePath) {
     this.browserWindow.on("focus", () => {
         if( events.onProjectSettingsChanged )
             events.onProjectSettingsChanged(this.settings);
+            this.browserWindow.send("change-headers");
     });
 }
 
@@ -306,14 +319,14 @@ ProjectWindow.open = function(filePath) {
 
 ProjectWindow.getViewSettings = function() {
     if(!fs.existsSync(viewSettingsPath)) {
-        return { theme:'light', zoom:'100' };
+        return { theme:'light', zoom:'100', font:'default' };
     }
     const json = fs.readFileSync(viewSettingsPath, "utf-8");
     try {
         return JSON.parse(json);
     } catch(e) {
         console.error('Error in view settings JSON parsing:', e);
-        return { theme:'light', zoom:'100' };
+        return { theme:'light', zoom:'100', font:'default'  };
     }
 }
 
@@ -325,6 +338,12 @@ ProjectWindow.addOrChangeViewSetting = function(name, data){
     });
     if(events.onViewSettingsChanged) {
         events.onViewSettingsChanged(viewSettings);
+    }
+}
+
+ProjectWindow.headers = function() {
+	if(events.onHeadersChanged) {
+        events.onHeadersChanged();
     }
 }
 

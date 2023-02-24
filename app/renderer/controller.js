@@ -327,7 +327,7 @@ ipc.on("set-tags-visible", (event, visible) => {
 
 
 function updateTheme(event, newTheme) {
-    let themes = ["dark", "contrast", "focus"];
+    let themes = ["dark", "highcontrast", "lowcontrast", "focus"];
     themes = themes.filter(e => e !== newTheme);
     if (newTheme && newTheme.toLowerCase() !== 'main')
     {
@@ -345,6 +345,64 @@ ipc.on("change-theme", (event, newTheme) => {
     window.localStorage.setItem("theme", newTheme);
 });
 
+
+function updateFont(event, newFont) {
+    let fonts = ['default', 'monospaced', 'sans-serif', 'serif', 'open-dyslexic'];
+    for (const font of fonts) {
+    	if(font !== newFont)
+    	{
+    		$("#editor").removeClass(font);
+    		$("#player").removeClass(font);
+    	}
+    }
+    if(newFont == 'default')
+    {
+		$("#editor").addClass('default-editor');
+		$("#player").addClass('default-player');
+    }
+    else
+    {
+    	$("#editor").addClass(newFont);
+    	$("#player").addClass(newFont);
+    }
+    
+	LiveCompiler.setEdited();
+}
+
+updateFont(null, window.localStorage.getItem("font"));
+ipc.on("change-font", (event, newFont) => {
+		updateFont(event, newFont);
+    window.localStorage.setItem("font", newFont);
+});
+
+/*
+
+ipc.on("change-headers", (event) => {
+	document.addEventListener("keyup", function(event) {
+    	if (event.keyCode === 13) {
+       	 	changeHeaders();
+    	}
+	});
+   
+
+});
+
+function changeHeaders() {
+	 // Search manually for element by ID
+    // (jQuery wrapping mutates attributes!)
+    let collection = document.getElementsByClassName("ace_flow ace_stitch ace_declaration ace_name");
+	for (let i = 0; i < collection.length; i++) {
+		let parent = collection[i].closest('.ace_line_group');
+		if(parent.firstElementChild.tagName.toLowerCase() != 'h3')
+		{
+			let text = parent.innerHTML;
+			parent.innerHTML = "<h3>" + text + "</h3>";
+		}
+		
+	}
+}
+
+*/
 
 
 ipc.on("zoom", (event, amount) => {

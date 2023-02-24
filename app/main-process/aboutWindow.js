@@ -68,4 +68,17 @@ AboutWindow.changeTheme = function (theme) {
     }
 }
 
+AboutWindow.changeFont = function (font) {
+	if(aboutWindow != null) {
+		aboutWindow.browserWindow.webContents.send("change-font", font);
+	}
+}
+
+/*
+AboutWindow.changeHeaders = function() {
+	if(aboutWindow != null) {
+		aboutWindow.browserWindow.webContents.send("change-headers");
+	}
+}
+*/
 exports.AboutWindow = AboutWindow;

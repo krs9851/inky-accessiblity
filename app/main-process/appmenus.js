@@ -13,31 +13,116 @@ let recentFiles = [];
 let customInkSnippets = [];
 let theme = null;
 let zoom = null;
+let font = null;
 
 
 let callbacks = {
 };
+
+/*
+function newHeaders() {
+	ProjectWindow.all().forEach(window => 
+  		{
+    		window.browserWindow.webContents.send('change-headers');
+		}
+	);
+}
+*/
+
+
+function dyslexiaSafe() {
+	font = 'open-dyslexic';
+	zoom = '125';
+	theme = 'lowcontrast';
+	
+	ProjectWindow.all().forEach(window => 
+  		{
+    		window.browserWindow.webContents.send('change-theme', theme);
+		}
+	);
+	
+	
+	callbacks.zoom(zoom);
+	
+	ProjectWindow.all().forEach(window => 
+  		{
+    		window.browserWindow.webContents.send('change-font', font);
+		}
+	);
+	
+			
+  	
+	callbacks.changeTheme(theme);
+    callbacks.changeFont(font);
+    
+    
+    
+}
+
+function revert() {
+	font = 'default';
+	zoom = '100';
+	theme = 'light';
+	
+	ProjectWindow.all().forEach(window => 
+  		{
+    		window.browserWindow.webContents.send('change-theme', theme);
+		}
+	);
+	
+	
+	callbacks.zoom(zoom);
+
+	
+   ProjectWindow.all().forEach(window => 
+  		{
+    		window.browserWindow.webContents.send('change-font', font);
+		}
+	);
+	
+	callbacks.changeTheme(theme);
+    callbacks.changeFont(font);
+    	
+}
 
 function refresh() {
     
     let themes = [];
 
     // Create the themes menu, with the correct current theme ticked
-    for (const t of ['light', 'dark', 'contrast', 'focus']) {
+    for (const t of ['light', 'dark', 'high contrast', 'low contrast', 'focus']) {
         themes.push({
             label: t.substring(0, 1).toUpperCase() + t.substring(1),
             type: 'radio',
-            checked: t === theme,
+            checked: t.replace(' ', '') === theme,
             click: () => {
-                theme = t;
+                theme =  t.replace(' ', '');
                 ProjectWindow.all().forEach(window => {
-                    window.browserWindow.webContents.send('change-theme', t);
-                    callbacks.changeTheme(t);
+                    window.browserWindow.webContents.send('change-theme', theme);
+                    callbacks.changeTheme(theme);
                 });
             }
         });
     }
-
+    
+    let fonts = [];
+    
+    // Create the font menu, with the correct current theme ticked
+    for (const f of ['default', 'monospaced', 'sans-serif', 'serif', 'open-dyslexic']) {
+        fonts.push({
+            label: f.substring(0, 1).toUpperCase() + f.substring(1),
+            type: 'radio',
+            checked: f === font,
+            click: () => {
+                font = f;
+                ProjectWindow.all().forEach(window => {
+                    window.browserWindow.webContents.send('change-font', f);
+                    callbacks.changeFont(f);
+                });
+            }
+        });
+    }
+	
     // Create the zoom menu, with the correct current zoom ticked
     let zoom_percents = [];
     for (const zoom_percent of ['50%', '75%', '100%', '125%', '150%', '175%', '200%', '250%', '300%']) {
@@ -293,6 +378,10 @@ function refresh() {
                     label: i18n._('Theme'),
                     submenu: themes
                 },
+               {
+                    label: i18n._('Font'),
+                    submenu: fonts
+                },
                 {
                     label: i18n._("Zoom %"),
                     submenu: zoom_percents
@@ -399,6 +488,23 @@ function refresh() {
                 },
             ]
         },
+        
+        {
+        	label: i18n._('&Access'),
+        	role: 'accessibility',
+        	submenu: 
+        	[
+        		{
+        			label: i18n._('Dyslexia Friendly'),
+        			click() { dyslexiaSafe(); }
+        		},
+        		{
+        			label: i18n._('Reset'),
+        			click() { revert(); }
+        			
+        		}
+        	]
+        }
     ];
 
     // Customise menus for the specific platform
@@ -482,5 +588,6 @@ exports.setCallbacks = c => callbacks = c;
 exports.setRecentFiles = files => recentFiles = files;
 exports.setTheme = t => theme = t;
 exports.setZoom = z => zoom = z;
+exports.setFont = f => font = f; 
 exports.setCustomSnippetMenus = snippets => customInkSnippets = snippets;
 exports.refresh = refresh;

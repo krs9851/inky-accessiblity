@@ -1,0 +1,38 @@
+.window.lowcontrast #main,
+.window.lowcontrast #editor,
+.window.lowcontrast #toolbar,
+.window.lowcontrast #editor .ace_gutter-layer,
+.window.lowcontrast .split {
+    background-color: #fffbf8;
+}
+
+.window.lowcontrast #main .sidebar,
+.window.lowcontrast #main .sidebar .footer {
+    background-color: #fffbf8;
+}
+
+.window.lowcontrast #player p.choice a:hover {
+    text-decoration: none;
+    font-weight: bold;
+    
+}
+
+.window.lowcontrast {
+	color: black;
+}
+
+.window.lowcontrast .ace_editor span.ace_choice.ace_bullets,
+.window.lowcontrast .ace_editor span.ace_choice.ace_weaveBracket,
+.window.lowcontrast .ace_editor span.ace_gather.ace_bullets {
+	color: #81adcc
+}
+
+.window.lowcontrast .ace_editor span.ace_flow.ace_declaration,
+.window.lowcontrast .ace_editor span.ace_divert,
+.window.lowcontrast .ace_editor span.ace_choice.ace_label,
+.window.lowcontrast .ace_editor span.ace_gather.ace_label,
+.window.lowcontrast .ace_editor span.ace_glue,
+.window.lowcontrast .ace_editor span.ace_include,
+.window.lowcontrast .ace_editor span.ace_external {
+    color:#4b8ab6;
+}

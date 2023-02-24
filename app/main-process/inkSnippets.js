@@ -262,6 +262,7 @@ exports.snippets = [
             }
         ]
     },
+    
     {
         categoryName: i18n._('Useful systems'),
         snippets: [
@@ -271,6 +272,24 @@ exports.snippets = [
             }
         ]
     },
+    
+    {separator: true},
+    
+    /*
+    {
+        categoryName: i18n._('Added Accessibility'),
+        snippets: [
+            {
+                name: i18n._('Tone Indicators'),
+                ink:  loadLongerSnippet("tone.ink") 
+            },
+            {
+                name: i18n._('Content Warnings'),
+                ink: loadLongerSnippet("contentW.ink") 
+            },
+        ]
+    },
+    */
 
     {separator: true},
 
